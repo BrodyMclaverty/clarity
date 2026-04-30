@@ -1130,13 +1130,24 @@ function updateBtns(){
 function buy(i){
   var p=itemPrices[i],tax=Math.floor(p*.2),tot=p+tax;
   if(balance<tot){showToast('Need '+Math.ceil(tot-balance).toLocaleString()+'ℝ more','err');addLog('Can\'t afford '+ITEMS[i].name,'fail','✕');renderLog();return;}
+  // Confirm — buying means using, which resets the clock
+  if(!confirm('Redeeming '+ITEMS[i].name+' means you used it.\n\nThis will reset your sobriety clock to right now.\n\nAre you sure?'))return;
+  // Deduct cost
   balance-=tot;totalSpent+=p;totalTax+=tax;buyCount++;
-  addLog('Redeemed '+ITEMS[i].name+' — '+tot.toLocaleString()+'ℝ','buy','✦');
-  showToast('Enjoy your '+ITEMS[i].name+' ✦','ok');
-  MILESTONES.filter(m=>m.buys&&buyCount===m.buys).forEach(m=>{
-    balance+=MILESTONE_REWARD;totalEarned+=MILESTONE_REWARD;
-    addLog('Milestone: '+m.l+' — +'+MILESTONE_REWARD+'ℝ Roots','milestone','🏆');showToast('🏆 '+m.l+' +'+MILESTONE_REWARD+'ℝ','wow');launchConfetti(30);
-  });
+  // Reset sobriety start to now — new journey begins
+  sobrietyStart=new Date();
+  lastDayBonus=0;
+  bonusCount=0;
+  spinKeys=0;
+  keysEarned=0;
+  totalEarned=0;
+  balance=0; // fresh start, previous balance was spent
+  _milestonesHit={};
+  graphData=[];
+  lastEscMonth=0;
+  itemPrices=ITEM_BASE.slice(); // prices reset too
+  addLog('Used '+ITEMS[i].name+' — clock reset. Back to day 0.','buy','✦');
+  showToast('Clock reset. Day 1 starts now. You got this 🌱','wow');
   renderLog();save();updateBtns();
 }
 
