@@ -1456,7 +1456,7 @@ function renderPlannerQueue(){
   el.innerHTML=plannerQueue.map((q,i)=>
     '<div style="display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:6px 10px">'
     +'<span style="font-size:12px;color:var(--txt)">'+q.label+'</span>'
-    +'<button onclick="removeFromQueue('+i+')" style="background:none;border:none;color:var(--red);font-size:14px;cursor:pointer;padding:0 4px">×</button>'
+    +'<button oclick="removeFromQueue('+i+')" style="background:none;border:none;color:var(--red);font-size:14px;cursor:pointer;padding:0 4px">×</button>'
     +'</div>'
   ).join('');
   updateFutureCalc();
